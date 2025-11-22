@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Book Your Session - Lee Lash Studio</title>
+
+<style>
+:root{
+  --accent:#f8cdda;
+  --accent-dark:#f4a6c9;
+  --bg:#fff0f5;
+  --card:#ffffff;
+  --text:#333;
+  --subtext:#666;
+}
+
+@keyframes fadeIn {
+  0%{opacity:0; transform:translateY(20px);}
+  100%{opacity:1; transform:translateY(0);}
+}
+@keyframes glowPulse {
+  0%,100%{box-shadow:0 0 0 rgba(255,182,193,0.3);}
+  50%{box-shadow:0 0 14px rgba(255,182,193,0.7);}
+}
+
+body{
+  margin:0;
+  background:var(--bg);
+  font-family:"Times New Roman",serif;
+  animation:fadeIn .8s ease;
+}
+
+header{
+  background:var(--card);
+  padding:20px 24px;
+  display:flex;
+  align-items:center;
+  gap:18px;
+  border-bottom:2px solid var(--accent-dark);
+  box-shadow:0 2px 12px rgba(0,0,0,0.05);
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+header img{height:90px;}
+nav{margin-left:auto;}
+nav a{
+  margin-left:16px;
+  text-decoration:none;
+  color:var(--text);
+  font-weight:600;
+  padding:6px 10px;
+  border-radius:8px;
+  transition:0.2s;
+}
+nav a:hover{background:var(--accent);}
+
+main{padding:20px 24px;}
+h1{
+  text-align:center;
+  font-size:48px;
+  color:#b3317a;
+  font-family:'Brush Script MT',cursive;
+}
+
+.card{
+  background:var(--card);
+  padding:24px;
+  border-radius:20px;
+  box-shadow:0 8px 30px rgba(0,0,0,0.07);
+  margin-bottom:20px;
+}
+
+input,select,textarea{
+  width:100%;
+  padding:12px;
+  background:#fff0f5;
+  border:1px solid var(--accent-dark);
+  border-radius:12px;
+}
+label{font-size:14px; color:var(--subtext);}
+button.primary{
+  background:linear-gradient(90deg,#f8cdda,#f4a6c9);
+  color:white;
+  padding:12px 18px;
+  border:none;
+  border-radius:12px;
+  font-weight:700;
+  animation:glowPulse 2s infinite ease-in-out;
+}
+
+footer{text-align:center; padding:20px; color:var(--subtext);}
+
+/* ----------- CUSTOM CALENDAR STYLES ----------- */
+.calendar-box {
+  padding: 10px;
+  border: 2px solid var(--accent-dark);
+  border-radius: 15px;
+  margin-top: 6px;
+  background: #ffffff;
+}
+
+.calendar-title {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 700;
+  color: #b3317a;
+  margin-bottom: 8px;
+}
+
+.calendar-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #b3317a;
+}
+
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+
+.calendar div {
+  padding: 10px;
+  background: #fff;
+  border: 1px solid var(--accent-dark);
+  border-radius: 10px;
+  text-align: center;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* fully booked or holiday */
+.calendar div.disabled {
+  background: #f2d4df;
+  color: #999;
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
+
+/* selected date */
+.calendar div.selected {
+  background: #f4a6c9;
+  color: white;
+  font-weight: 700;
+}
+
+/* SUNDAYS - CLOSED */
+.calendar div.closed {
+  background: #f8cdda;
+  color: #b3317a;
+  font-weight: 600;
+  cursor: not-allowed;
+  border: 2px solid #f4a6c9;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <img src="lee lash studios logo.jpg" alt="Lee Lash Studio logo">
+  <div style="font-weight:900;font-size:28px;color:#b3317a;font-family:'Brush Script MT',cursive;">Lee Lash Studio</div>
+  <nav>
+    <a href="lee lash studios webpage.html">Home</a>
+    <a href="booking.html">Book & Prices</a>
+    <a href="https://www.instagram.com/lee.lashstudio" target="_blank">Instagram</a>
+    <a href="mailto:leelashstudio@yahoo.com">Email</a>
+  </nav>
+</header>
+
+<main>
+
+<h1>Book Your Glam Session</h1>
+
+<div class="card">
+  <h2>Booking Form</h2>
+
+  <form id="bookingForm" onsubmit="sendEmail(); return false;">
+
+    <div class="row">
+      <label>Full Name</label>
+      <input type="text" id="name" required>
+    </div>
+
+    <div class="row">
+      <label>Email</label>
+      <input type="email" id="email" required>
+    </div>
+
+    <div class="row">
+      <label>Phone</label>
+      <input type="tel" id="phone" required>
+    </div>
+
+    <!-- CALENDAR -->
+    <div class="row">
+      <label>Select a Date</label>
+      <div id="customCalendar"></div>
+      <input type="hidden" id="date" required>
+    </div>
+
+    <div class="row">
+      <label>Available Time Slots</label>
+      <select id="availability" required>
+        <option value="">Select a date first</option>
+      </select>
+    </div>
+
+    <div class="row">
+      <label>Notes</label>
+      <textarea id="notes" placeholder="Optional"></textarea>
+    </div>
+
+    <button type="submit" class="primary">Book Now</button>
+  </form>
+</div>
+
+<div class="card">
+  <h2>Price List</h2>
+  <p>Natural/Classic Set — <strong>$2,500</strong></p>
+  <p>Hybrid Set — <strong>$3,000</strong></p>
+  <p>Wispy Set — <strong>$3,500</strong></p>
+  <p>Volume Set — <strong>$4,000</strong></p>
+  <p>Dramatic Set — <strong>$4,500</strong></p>
+</div>
+
+<div class="card">
+  <h2>Deposit Information</h2>
+  <p>A deposit is required to confirm your booking. Please message the studio on Instagram to submit your deposit.</p>
+  <p><strong>To secure your appointment, a non-refundable deposit of $1,500 is required at the time of booking.</strong></p>
+  <p>Please forward a screenshot of your payment immediately after sending the deposit. Appointments are only confirmed once the deposit and proof of payment have been received.</p>
+</div>
+
+</main>
+
+<footer>© <span id="year"></span> Lee Lash Studio</footer>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+
+
+// TIME SLOT GENERATOR
+function generateTimeSlots(start, end, interval){
+  let times = [];
+  
+  let [startHour, startMin] = start.split(":").map(Number);
+  let [endHour, endMin] = end.split(":").map(Number);
+
+  let startTime = new Date(0,0,0,startHour,startMin);
+  let endTime = new Date(0,0,0,endHour,endMin);
+
+  while(startTime <= endTime){
+    let h = startTime.getHours();
+    let m = startTime.getMinutes();
+    let ampm = h >= 12 ? "PM" : "AM";
+    let hr = (h % 12) || 12;
+    let formatted = `${hr}:${m.toString().padStart(2,"0")} ${ampm}`;
+
+    times.push(formatted);
+    startTime = new Date(startTime.getTime() + interval);
+  }
+  return times;
+}
+
+
+// MOCK BOOKED DATA
+const bookedData = {
+  "2025-12-10": ["10:30 AM", "12:00 PM", "4:30 PM"],
+  "2025-12-25": "HOLIDAY",
+  "2025-12-26": "HOLIDAY"
+};
+
+
+// BUILD CALENDAR
+function buildCalendar() {
+  const container = document.getElementById("customCalendar");
+  container.innerHTML = "";
+
+  const box = document.createElement("div");
+  box.className = "calendar-box";
+
+  // MONTH TITLE
+  const title = document.createElement("div");
+  title.className = "calendar-title";
+  title.textContent = "December 2025";
+  box.appendChild(title);
+
+  // HEADER
+  const header = document.createElement("div");
+  header.className = "calendar-header";
+
+  const weekdays = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat",];
+  weekdays.forEach(day => {
+    let d = document.createElement("div");
+    d.textContent = day;
+    header.appendChild(d);
+  });
+  box.appendChild(header);
+
+  // GRID
+  const calendar = document.createElement("div");
+  calendar.className = "calendar";
+
+  const year = 2025;
+  const month = 11; // December
+  const daysInMonth = new Date(year, month+1, 0).getDate();
+
+  // Fix alignment: Monday = 1 → first column
+  let firstDay = new Date(year, month, 1).getDay(); // 0=Sun
+  firstDay = (firstDay + 6) % 7;
+
+  for(let i=0; i<firstDay; i++){
+    let empty = document.createElement("div");
+    empty.style.visibility = "hidden";
+    calendar.appendChild(empty);
+  }
+
+  for(let day=1; day<=daysInMonth; day++){
+    const dateStr = `2025-12-${String(day).padStart(2,"0")}`;
+    const cell = document.createElement("div");
+
+    let weekday = new Date(dateStr).getDay(); // 0=Sun
+
+    // CLOSED SUNDAYS
+    if(weekday === 0){
+      cell.textContent = `${day} (Closed)`;
+      cell.classList.add("closed");
+      calendar.appendChild(cell);
+      continue;
+    }
+
+    cell.textContent = day;
+
+    // holidays/full
+    if(bookedData[dateStr] === "FULL" || bookedData[dateStr] === "HOLIDAY"){
+      cell.classList.add("disabled");
+    }
+
+    cell.addEventListener("click", () => {
+      if(cell.classList.contains("disabled") || cell.classList.contains("closed")) return;
+
+      document.querySelectorAll(".calendar div").forEach(c => c.classList.remove("selected"));
+      cell.classList.add("selected");
+
+      document.getElementById("date").value = dateStr;
+      updateTimeSlots(dateStr);
+    });
+
+    calendar.appendChild(cell);
+  }
+
+  box.appendChild(calendar);
+  container.appendChild(box);
+}
+
+buildCalendar();
+
+
+// UPDATE TIMES
+function updateTimeSlots(selectedDate){
+  const availabilitySelect = document.getElementById("availability");
+  availabilitySelect.innerHTML = "";
+
+  if(bookedData[selectedDate] === "FULL" || bookedData[selectedDate] === "HOLIDAY"){
+    let opt = document.createElement("option");
+    opt.textContent = "No appointments available";
+    availabilitySelect.appendChild(opt);
+    return;
+  }
+
+  let weekday = new Date(selectedDate).getDay();
+  let times = [];
+
+  if(weekday >= 1 && weekday <= 5){
+    times = generateTimeSlots("09:00","19:00",90*60*1000);
+  } else if(weekday === 6){
+    times = generateTimeSlots("10:00","20:00",90*60*1000);
+  } else {
+    let opt = document.createElement("option");
+    opt.textContent = "Closed on Sundays";
+    availabilitySelect.appendChild(opt);
+    return;
+  }
+
+  const bookedTimes = bookedData[selectedDate] || [];
+
+  times.forEach(t=>{
+    if(!bookedTimes.includes(t)){
+      let opt = document.createElement("option");
+      opt.value = t;
+      opt.textContent = t;
+      availabilitySelect.appendChild(opt);
+    }
+  });
+
+  if(availabilitySelect.innerHTML.trim()===""){
+    let opt = document.createElement("option");
+    opt.textContent = "No times available";
+    availabilitySelect.appendChild(opt);
+  }
+}
+
+
+// SEND EMAIL
+function sendEmail(){
+  const name = document.getElementById('name').value;
+  const email = document.getElementById('email').value;
+  const phone = document.getElementById('phone').value;
+  const date = document.getElementById('date').value;
+  const availability = document.getElementById('availability').value;
+  const notes = document.getElementById('notes').value;
+
+  const subject = encodeURIComponent(`Booking Request from ${name}`);
+  const body = encodeURIComponent(
+`Name: ${name}
+Email: ${email}
+Phone: ${phone}
+Date: ${date}
+Selected Time: ${availability}
+Notes: ${notes}`
+  );
+
+  window.location.href = `mailto:leelashstudio@yahoo.com?subject=${subject}&body=${body}`;
+  alert("Your email app is opening. Press send to confirm.");
+}
+</script>
+
+</body>
+</html>
+
